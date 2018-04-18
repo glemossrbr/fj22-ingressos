@@ -1,6 +1,9 @@
 package br.com.caelum.ingresso.dao;
 
+import br.com.caelum.ingresso.model.Filme;
 import br.com.caelum.ingresso.model.Sala;
+import br.com.caelum.ingresso.model.Sessao;
+
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -32,4 +35,10 @@ public class SalaDao {
     public void delete(Integer id) {
         manager.remove(findOne(id));
     }
+    
+    //consulta em jpql
+    public List<Sessao> findAllFilmes(Filme filme) {
+        return manager.createQuery("select s from Sessao s where s.filme =:filme", Sessao.class).getResultList();
+    }
+
 }

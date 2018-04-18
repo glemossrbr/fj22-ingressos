@@ -1,16 +1,24 @@
 package br.com.caelum.ingresso.controller;
 
-import br.com.caelum.ingresso.dao.FilmeDao;
-import br.com.caelum.ingresso.model.Filme;
+import java.util.List;
+import java.util.Optional;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.validation.Valid;
-import java.util.Optional;
+import br.com.caelum.ingresso.dao.FilmeDao;
+import br.com.caelum.ingresso.dao.SessaoDao;
+import br.com.caelum.ingresso.model.Filme;
+import br.com.caelum.ingresso.model.Sessao;
 
 /**
  * Created by nando on 03/03/17.
@@ -18,11 +26,29 @@ import java.util.Optional;
 @Controller
 public class FilmeController {
 
-
     @Autowired
     private FilmeDao filmeDao;
+    @Autowired
+    private SessaoDao sessaoDao;
 
+    @GetMapping("/filme/em-cartaz")
+    public ModelAndView emCartaz() {
+    	ModelAndView mav = new ModelAndView("filme/em-cartaz");
+    	mav.addObject("filmes", filmeDao.findAll());
+    	return mav;
+    }
+    
+    @GetMapping("/filme/{idFilme}/detalhe")
+    public ModelAndView detalhes(@PathVariable("idFilme") Integer filmeId) {
+    	ModelAndView mav = new ModelAndView("filme/detalhe");
+    	Filme filme = filmeDao.findOne(filmeId);
+    	
+    	List<Sessao> sessoes = sessaoDao.buscaSessoesDoFilme(filme); 
+    	mav.addObject("sessoes",sessoes);
 
+    	return mav;
+    }
+    
     @GetMapping({"/admin/filme", "/admin/filme/{id}"})
     public ModelAndView form(@PathVariable("id") Optional<Integer> id, Filme filme){
 
@@ -37,6 +63,7 @@ public class FilmeController {
         return modelAndView;
     }
 
+    
 
     @PostMapping("/admin/filme")
     @Transactional
