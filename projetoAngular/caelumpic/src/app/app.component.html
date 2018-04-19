@@ -1,9 +1,13 @@
 <div style="text-align:center" class="jumbotron">
-  <h1>
-    Caelumpic!
+  <h1 class="text-center">
+    {{title}}
   </h1>
-  
 </div>
-<div class="text-center">
-  <img src="../assets/leao.jpg" class="rounded mx-auto d-block" alt="Leao">
+
+<div class="container">
+   <!--><foto url="assets/leao.jpg" titulo="Leao"></foto>
+   <foto url="assets/leopardo.jpg" titulo="Leopardo"></foto>-->
+
+   <foto *ngFor="let foto of fotos" url="{{ foto.url }}" titulo="{{ foto.titulo }}"></foto>
+
 </div>
