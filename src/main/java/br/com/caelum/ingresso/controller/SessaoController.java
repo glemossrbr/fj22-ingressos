@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -37,6 +38,17 @@ public class SessaoController {
 		mav.addObject("sala", salaDao.findOne(salaId));
 		mav.addObject("filmes",filmeDao.findAll());
 		mav.addObject("form",form);
+		
+		return mav;
+   } // end form
+	
+	@GetMapping("/admin/{idSessao}/lugares") 
+	public ModelAndView lugares(@PathVariable Integer idSessao) {
+		
+		ModelAndView mav = new ModelAndView("sessao/lugares"); //jsp - mapeamento das views
+		Sessao sessao = sessaoDao.findOne(idSessao);
+		
+		mav.addObject("sessao", sessao);
 		
 		return mav;
    } // end form
